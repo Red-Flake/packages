@@ -4,7 +4,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_36-bin
+  electron_35-bin
 }:
 buildNpmPackage rec {
   pname = "bloodhound-ce-desktop";
@@ -21,7 +21,7 @@ buildNpmPackage rec {
 
   # Useful for debugging, just run "nix-shell" and then "electron ."
   nativeBuildInputs = [
-    electron_36-bin
+    electron_35-bin
   ];
 
   # Otherwise it will try to run a build phase (via npm build) that we don't have or need, with an error:
@@ -38,7 +38,7 @@ buildNpmPackage rec {
   # The node_modules/XXX is such that XXX is the "name" in package.json
   # The path might differ, for instance in electron-forge you need build/main/main.js
   postInstall = ''
-    makeWrapper ${electron_36-bin}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_35-bin}/bin/electron $out/bin/${pname} \
       --add-flags $out/lib/node_modules/${pname}/src/main.js
   '';
 
