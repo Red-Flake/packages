@@ -14,7 +14,7 @@ buildNpmPackage rec {
     owner = "Red-Flake";
     repo = "BloodHound-CE-Desktop";
     rev = "v${version}"; # Use a tag or commit hash for reproducibility
-    sha256 = "sha256-0hwax2085z4pcac88g5sl6jrp9i9bz8zzs900mkxf0v4jlcwsa0h"; # nix-prefetch-url --unpack https://github.com/Red-Flake/BloodHound-CE-Desktop/archive/v1.0.1.tar.gz
+    sha256 = "sha256-ECjNGZVkA9dnBSDp/9FfKaabpaG6PISYYpf8goDoikM="; # nix-prefetch-url --unpack https://github.com/Red-Flake/BloodHound-CE-Desktop/archive/v1.0.1.tar.gz
   };
 
   npmDepsHash = "sha256-OLSCHY9xcznPo+JmDVma3J+h48TrSY1rgb1ScL86REc="; # you will get an error about mismatching hash the first time. Just copy the hash here
