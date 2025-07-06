@@ -53,6 +53,7 @@ buildNpmPackage rec {
     } ];
     platforms = platforms.linux; # Electron typically targets Linux, macOS, Windows
     mainProgram = "bloodhound-ce-desktop"; # Added for nix run
+    sourceProvenance = [ "fromSource" ];
     broken = false; # Set to true if the package is known to be broken
   };
 
