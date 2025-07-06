@@ -46,7 +46,11 @@ buildNpmPackage rec {
     description = "Desktop Electron application for BloodHound-CE";
     homepage = "https://github.com/Red-Flake/BloodHound-CE-Desktop";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ Mag1cByt3s ]; # Add your maintainer info, e.g., { github = "Red-Flake"; email = "your-email"; }
+    maintainers = [ {
+      github = "Mag1cByt3s";
+      email = "ppeinecke@protonmail.com";
+      name = "Pascal Peinecke";
+    } ];
     platforms = platforms.linux; # Electron typically targets Linux, macOS, Windows
     broken = false; # Set to true if the package is known to be broken
   };
