@@ -4,24 +4,24 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_34
+  electron_36
 }:
 buildNpmPackage rec {
   pname = "bloodhound-ce-desktop";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Red-Flake";
     repo = "BloodHound-CE-Desktop";
     rev = "v${version}"; # Use a tag or commit hash for reproducibility
-    sha256 = "sha256-9lXmvel1RwPC7GFUqeYl8/hIsrIHgZjqigb3IlabwpU="; # nix-prefetch-url --unpack https://github.com/Red-Flake/BloodHound-CE-Desktop/archive/v1.0.0.tar.gz
+    sha256 = "sha256-0hwax2085z4pcac88g5sl6jrp9i9bz8zzs900mkxf0v4jlcwsa0h"; # nix-prefetch-url --unpack https://github.com/Red-Flake/BloodHound-CE-Desktop/archive/v1.0.1.tar.gz
   };
 
   npmDepsHash = "sha256-OLSCHY9xcznPo+JmDVma3J+h48TrSY1rgb1ScL86REc="; # you will get an error about mismatching hash the first time. Just copy the hash here
 
   # Useful for debugging, just run "nix-shell" and then "electron ."
   nativeBuildInputs = [
-    electron_34
+    electron_36  # Electron 36.6.0
   ];
 
   # Otherwise it will try to run a build phase (via npm build) that we don't have or need, with an error:
@@ -38,7 +38,7 @@ buildNpmPackage rec {
   # The node_modules/XXX is such that XXX is the "name" in package.json
   # The path might differ, for instance in electron-forge you need build/main/main.js
   postInstall = ''
-    makeWrapper ${electron_34}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_36}/bin/electron $out/bin/${pname} \
       --add-flags $out/lib/node_modules/${pname}/src/main.js
   '';
 
