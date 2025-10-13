@@ -114,33 +114,33 @@ in
 
       # Put our generated config where the binary expects it by default
       environment.etc."bloodhound/bloodhound.config.json".source =
-        json.generate "bloodhound.config.json" {
-          version = 2;
-          bind_addr = "${cfg.settings.server.host}:${toString cfg.settings.server.port}";
-          work_dir = "/var/lib/bloodhound-ce/work";
-          log_level = cfg.settings.logLevel;               # "info" is fine; upstream examples use "INFO"
-          log_path  = cfg.settings.logPath;
-          collectors_base_path = "${cfg.package}/share/bloodhound/collectors";
+        json.generate "bloodhound.config.json"
+          {
+            version = 2;
+            bind_addr = "${cfg.settings.server.host}:${toString cfg.settings.server.port}";
+            work_dir = "/var/lib/bloodhound-ce/work";
+            log_level = cfg.settings.logLevel; # "info" is fine; upstream examples use "INFO"
+            log_path = cfg.settings.logPath;
+            collectors_base_path = "${cfg.package}/share/bloodhound/collectors";
 
-          # --- PostgreSQL (the API DB) ---
-          database = {
-            # you can also set a full "connection" string instead of these four
-            addr     = cfg.database.host;     # "/run/postgresql" or "127.0.0.1:5432"
-            database = cfg.database.name;     # "bloodhound"
-            username = cfg.database.user;     # "bloodhound"
-            # DO NOT put "secret" (password) here; provide it via env (below)
+            # --- PostgreSQL (the API DB) ---
+            database = {
+              # you can also set a full "connection" string instead of these four
+              addr = cfg.database.host; # "/run/postgresql" or "127.0.0.1:5432"
+              database = cfg.database.name; # "bloodhound"
+              username = cfg.database.user; # "bloodhound"
+              # DO NOT put "secret" (password) here; provide it via env (below)
+            };
+
+            # leave neo4j defaults unless you need to configure it here:
+            # graph_driver = "neo4j";
+            # neo4j = {
+            #   addr = "localhost:7687";
+            #   database = "neo4j";
+            #   username = "neo4j";
+            #   # password via env: bhe_neo4j_secret
+            # };
           };
-
-          # leave neo4j defaults unless you need to configure it here:
-          # graph_driver = "neo4j";
-          # neo4j = {
-          #   addr = "localhost:7687";
-          #   database = "neo4j";
-          #   username = "neo4j";
-          #   # password via env: bhe_neo4j_secret
-          # };
-        };
-      };
 
       systemd.services.bloodhound-ce = {
         description = "BloodHound Community Edition API";
@@ -181,8 +181,7 @@ in
               "bhe_collectors_base_path=${cfg.package}/share/bloodhound/collectors"
             ]
             # supply the DB password as env the app understands:
-            ++ lib.optional (cfg.database.password != null)
-              "bhe_database_secret=${cfg.database.password}";
+            ++ lib.optional (cfg.database.password != null) "bhe_database_secret=${cfg.database.password}";
 
             # Hardening (reasonable baseline)
             NoNewPrivileges = true;
