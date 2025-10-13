@@ -210,69 +210,71 @@ in
             envFiles =
               lib.optional (cfg.database.passwordFile != null) cfg.database.passwordFile
               ++ lib.optional (cfg.neo4j.passwordFile != null) cfg.neo4j.passwordFile;
-          in [
-          {
-            User = cfg.user;
-            Group = cfg.group;
+          in
+          [
+            {
+              User = cfg.user;
+              Group = cfg.group;
 
-            # Creates /var/lib/bloodhound-ce and ensures ownership
-            StateDirectory = [
-              "bloodhound-ce"
-              "bloodhound-ce/work"
-            ];
-            StateDirectoryMode = "0700";
-            WorkingDirectory = "/var/lib/bloodhound-ce";
+              # Creates /var/lib/bloodhound-ce and ensures ownership
+              StateDirectory = [
+                "bloodhound-ce"
+                "bloodhound-ce/work"
+              ];
+              StateDirectoryMode = "0700";
+              WorkingDirectory = "/var/lib/bloodhound-ce";
 
-            ExecStart =
-              let
-                args = [
-                  (lib.getExe cfg.package)
-                  "-configfile"
-                  "/etc/bloodhound/bloodhound.config.json"
-                ];
-              in
-              utils.escapeSystemdExecArgs args;
+              ExecStart =
+                let
+                  args = [
+                    (lib.getExe cfg.package)
+                    "-configfile"
+                    "/etc/bloodhound/bloodhound.config.json"
+                  ];
+                in
+                utils.escapeSystemdExecArgs args;
 
-            Environment = [
-              "bhe_work_dir=/var/lib/bloodhound-ce/work"
-              "bhe_collectors_base_path=${cfg.package}/share/bloodhound/collectors"
-            ]
-            # supply the DB secrets as env the app understands:
-            ++ lib.optional (cfg.database.password != null) "bhe_database_secret=${cfg.database.password}"
-            ++ lib.optional (cfg.neo4j.password != null) "bhe_neo4j_secret=${cfg.neo4j.password}";
+              Environment = [
+                "bhe_work_dir=/var/lib/bloodhound-ce/work"
+                "bhe_collectors_base_path=${cfg.package}/share/bloodhound/collectors"
+              ]
+              # supply the DB secrets as env the app understands:
+              ++ lib.optional (cfg.database.password != null) "bhe_database_secret=${cfg.database.password}"
+              ++ lib.optional (cfg.neo4j.password != null) "bhe_neo4j_secret=${cfg.neo4j.password}";
 
-            # reasonable default hardening settings
-            NoNewPrivileges = true;
-            PrivateDevices = true;
-            ProtectKernelTunables = true;
-            ProtectKernelModules = true;
-            ProtectControlGroups = true;
-            MemoryDenyWriteExecute = true;
-            LockPersonality = true;
-            RestrictAddressFamilies = [
-              "AF_UNIX"
-              "AF_INET"
-              "AF_INET6"
-            ];
-            DevicePolicy = "closed";
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            RestrictSUIDSGID = true;
+              # reasonable default hardening settings
+              NoNewPrivileges = true;
+              PrivateDevices = true;
+              ProtectKernelTunables = true;
+              ProtectKernelModules = true;
+              ProtectControlGroups = true;
+              MemoryDenyWriteExecute = true;
+              LockPersonality = true;
+              RestrictAddressFamilies = [
+                "AF_UNIX"
+                "AF_INET"
+                "AF_INET6"
+              ];
+              DevicePolicy = "closed";
+              RestrictNamespaces = true;
+              RestrictRealtime = true;
+              RestrictSUIDSGID = true;
 
-            # keep logs/private files private by default
-            UMask = "0077";
+              # keep logs/private files private by default
+              UMask = "0077";
 
-            # nice-to-have
-            Restart = "on-failure";
-            RestartSec = "5s";
-          }
+              # nice-to-have
+              Restart = "on-failure";
+              RestartSec = "5s";
+            }
 
-          # Conditionally add EnvironmentFile when provided
-          (mkIf (envFiles != []) {
-            # Allow providing one or more EnvironmentFile(s)
-            EnvironmentFile = envFiles;
-          })
-        ];
+            # Conditionally add EnvironmentFile when provided
+            (mkIf (envFiles != [ ]) {
+              # Allow providing one or more EnvironmentFile(s)
+              EnvironmentFile = envFiles;
+            })
+          ]
+        );
       };
 
       # System user/group (only if using defaults)
