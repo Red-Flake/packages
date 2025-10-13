@@ -78,8 +78,8 @@ in
         description = "PostgreSQL host (socket dir or hostname).";
       };
       port = mkOption {
-        type = types.port;
-        default = 5432;
+        type = types.str;
+        default = "5432";
         description = "PostgreSQL port.";
       };
       name = mkOption {
