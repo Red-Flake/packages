@@ -27,10 +27,9 @@ let
   # SQL for the feature flag (table/columns follow upstream appcfg feature-flag schema)
   # If your schema uses a different table/column naming, tweak here:
   darkSQL = ''
-    -- enable/disable dark mode feature flag
-    INSERT INTO appcfg_feature_flags (flag, enabled)
-    VALUES ('dark_mode', ${if cfg.featureFlags.darkMode then "TRUE" else "FALSE"})
-    ON CONFLICT (flag) DO UPDATE SET enabled = EXCLUDED.enabled;
+    UPDATE feature_flags
+    SET enabled = ${if cfg.featureFlags.darkMode then "TRUE" else "FALSE"}
+    WHERE key = 'dark_mode';
   '';
 
   # A tiny script to (upsert) the dark_mode flag after the API starts
