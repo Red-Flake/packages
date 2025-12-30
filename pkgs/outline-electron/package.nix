@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/lib/outline-electron
-    cp -r src/* $out/lib/outline-electron/
+    cp -r src/. $out/lib/outline-electron/
 
     mkdir -p $out/bin
     makeWrapper ${electron_39-bin}/bin/electron $out/bin/outline-electron \
