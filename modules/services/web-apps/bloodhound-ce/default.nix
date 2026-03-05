@@ -271,6 +271,9 @@ in
               StateDirectoryMode = "0700";
               WorkingDirectory = "/var/lib/bloodhound-ce";
 
+              # Creates /var/log/bloodhound-ce for log files
+              LogsDirectoryMode = "0750";
+
               ExecStart =
                 let
                   args = [
