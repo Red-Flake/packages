@@ -272,6 +272,7 @@ in
               WorkingDirectory = "/var/lib/bloodhound-ce";
 
               # Creates /var/log/bloodhound-ce for log files
+              LogsDirectory = "bloodhound-ce";
               LogsDirectoryMode = "0750";
 
               ExecStart =
